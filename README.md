@@ -26,8 +26,8 @@ Note: this put the jar in build/libs
  > java -cp build/libs/distributed-grep-1.0-SNAPSHOT.jar eece513.server.GrepServer
 ```
 
-## Upgrade from Java7 to Java8 ##
-...
+### Upgrade from Java7 to Java8 ###
+```
  > sudo yum install java-1.8.0
  > sudo yum remove java-1.7.0-openjdk
-...
+```
