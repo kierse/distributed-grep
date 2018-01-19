@@ -14,7 +14,7 @@ class SocketConnectionListener(private val port: Int, private val logger: Logger
                 serverSocket.accept().use { socket -> // listen for incoming connection
                     logger.info(tag, "new connection on port: $port")
 
-                    onQuery(ConnectionImpl(socket))
+                    onQuery(ConnectionImpl(socket, logger))
 
                     // inform client that we're done sending data..
                     logger.debug(tag, "closing output stream")
