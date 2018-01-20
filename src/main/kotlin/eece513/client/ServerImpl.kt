@@ -6,7 +6,7 @@ import java.net.InetAddress
 class ServerImpl(
         private val ip: InetAddress,
         private val port: Int,
-        private val name: String,
+        override val name: String,
         private val logger: Logger
 ) : GrepClient.Server {
 

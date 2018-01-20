@@ -1,18 +1,17 @@
 package eece513.client
 
-import eece513.Logger
-import eece513.TinyLogWrapper
-import eece513.SERVER_IP
-import eece513.SERVER_PORT
+import eece513.*
 import java.util.concurrent.ConcurrentLinkedQueue
 
 class GrepClient(
         private val presenter: Presenter,
+        private val helpGenerator: HelpGenerator,
         private val logger: Logger,
         private vararg val servers: Server
 ) {
     interface Presenter {
         fun displayResponse(response: Server.Response)
+        fun displayHelp(msg: String)
     }
 
     interface Server {
@@ -25,7 +24,13 @@ class GrepClient(
             fun isComplete(): Boolean
         }
 
+        val name: String
+
         fun search(args: Array<String>, onResult: (Response) -> Unit): Query
+    }
+
+    interface HelpGenerator {
+        fun getHelpMessage(): String
     }
 
     companion object {
@@ -35,19 +40,24 @@ class GrepClient(
         fun main(args: Array<String>) {
             val presenter = PrintStreamPresenter(System.out, System.err)
             val logger = TinyLogWrapper()
+            val helpGenerator = GrepHelpGenerator(GREP_CMD, logger)
 
 //            FileIO().readLinesAsInetAddress(System.getProperty("user.dir") + "/servers.txt").forEach {
 //                val servers = arrayOf(ServerImpl(it, SERVER_PORT, "server1", logger))
                 val servers = arrayOf(ServerImpl(SERVER_IP, SERVER_PORT, "server1", logger))
-
-
-                GrepClient(presenter, logger, *servers)
-                        .search(args)
 //            }
+
+            GrepClient(presenter, helpGenerator, logger, *servers)
+                    .search(args)
         }
     }
 
-    private fun search(args: Array<String>) {
+    internal fun search(args: Array<String>) {
+        if (args.isEmpty()) {
+            presenter.displayHelp(helpGenerator.getHelpMessage())
+            return
+        }
+
         // Create queue to contain search results
         // Note: results from all servers will be available here
         val queue: ConcurrentLinkedQueue<Server.Response> = ConcurrentLinkedQueue()
@@ -55,6 +65,7 @@ class GrepClient(
         // Connection servers
         logger.info(tag, "args: [{}]", args.joinToString(", "))
         var queries: List<Server.Query> = servers.map { server ->
+            logger.debug(tag, "searching ${server.name}...")
             server.search(args) { response ->
                 logger.debug(tag, "response: {}", response)
                 queue.add(response)

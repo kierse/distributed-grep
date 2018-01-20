@@ -12,6 +12,8 @@ class PrintStreamPresenter(
         }
     }
 
+    override fun displayHelp(msg: String) = err.println(msg)
+
     private fun printStdOut(response: GrepClient.Server.Response.Result) {
         for (line in response.result) {
             out.println("${response.name}:$line")
