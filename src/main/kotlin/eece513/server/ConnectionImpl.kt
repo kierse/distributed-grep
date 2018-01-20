@@ -1,12 +1,15 @@
 package eece513.server
 
+import eece513.Logger
 import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.Socket
 
-class ConnectionImpl(socket: Socket) : GrepServer.ConnectionListener.Connection {
+class ConnectionImpl(socket: Socket, private val logger: Logger) : GrepServer.ConnectionListener.Connection {
+    private val tag = ConnectionImpl::class.java.simpleName
+
     private val br: BufferedReader
     private val bw: BufferedWriter
 
@@ -18,7 +21,18 @@ class ConnectionImpl(socket: Socket) : GrepServer.ConnectionListener.Connection 
         bw = BufferedWriter(osw)
     }
 
-    override fun getQuery(): String = br.readLine() ?: ""
+    override fun getQueryArgs(): Array<String> {
+        val args = mutableListOf<String>()
+        while (true) {
+            val arg = br.readLine() ?: break
+            logger.debug(tag, "arg: $arg")
+            args.add(arg)
+        }
+
+        logger.debug(tag, "received ${args.size} args...")
+
+        return args.toTypedArray()
+    }
 
     override fun sendResult(result: String) {
         bw.write(result)

@@ -11,16 +11,11 @@ class GrepQueryService(
 ) : GrepServer.QueryService {
     private val tag = GrepQueryService::class.java.simpleName
 
-    override fun search(query: String, onResult: (String) -> Unit) {
-        logger.debug(tag, "grep cmd: {} {} {}", cmd, query, logFile)
+    override fun search(args: Array<String>, onResult: (String) -> Unit) {
+        val argsList = arrayOf(cmd, *args, logFile)
+        logger.debug(tag, "grep cmd: {}", argsList.joinToString(" "))
 
-        val runtime = Runtime.getRuntime()
-
-        val args = mutableListOf(cmd)
-        args.addAll(query.split(" "))
-        args.add(logFile)
-
-        val proc = runtime.exec(args.toTypedArray())
+        val proc = ProcessBuilder(*argsList).start()
 
         val isr = InputStreamReader(proc.inputStream)
         val br = BufferedReader(isr)
