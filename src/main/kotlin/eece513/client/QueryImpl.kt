@@ -15,8 +15,9 @@ class QueryImpl(
         private val id: String,
         private val args: Array<String>,
         private val logger: Logger,
-        private val onResult: (GrepClient.Server.Result) -> Unit
+        private val onResponse: (GrepClient.Server.Response) -> Unit
 ) : GrepClient.Server.Query, Runnable {
+
     private val tag = QueryImpl::class.java.simpleName
     private val moreResults = AtomicBoolean(true)
 
@@ -41,14 +42,38 @@ class QueryImpl(
             val br = BufferedReader(isr)
 
             while (true) {
-                val line = br.readLine() ?: break
-                val result = GrepClient.Server.Result(id, line)
-                onResult.invoke(result)
+                val header = br.readLine() ?: break
+
+                val (type, count) = header.split(":")
+                val result = readValue(br, count.toInt())
+
+                val response = when (type) {
+                    "E" -> GrepClient.Server.Response.Error(
+                            name = id, result = result
+                    )
+
+                    "R" -> GrepClient.Server.Response.Result(
+                            name = id, result = result
+                    )
+
+                    else -> throw IllegalArgumentException("unknown header type: $type")
+                }
+
+                onResponse.invoke(response)
             }
 
             socket.shutdownInput()
             moreResults.set(false)
         }
+    }
+
+    private fun readValue(reader: BufferedReader, count: Int): List<String> {
+        val list = ArrayList<String>(count)
+        (0 until count).forEach {
+            list.add(reader.readLine())
+        }
+
+        return list
     }
 
     override fun isComplete(): Boolean = !moreResults.get()

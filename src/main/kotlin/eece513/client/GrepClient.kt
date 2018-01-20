@@ -12,17 +12,20 @@ class GrepClient(
         private vararg val servers: Server
 ) {
     interface Presenter {
-        fun displayResult(result: Server.Result)
+        fun displayResponse(response: Server.Response)
     }
 
     interface Server {
-        class Result(val name: String, val result: String)
+        sealed class Response {
+            data class Result(val name: String, val result: List<String>) : Response()
+            data class Error(val name: String, val result: List<String>) : Response()
+        }
 
         interface Query {
             fun isComplete(): Boolean
         }
 
-        fun search(args: Array<String>, onResult: (Result) -> Unit): Query
+        fun search(args: Array<String>, onResult: (Response) -> Unit): Query
     }
 
     companion object {
@@ -30,7 +33,7 @@ class GrepClient(
 
         @JvmStatic
         fun main(args: Array<String>) {
-            val presenter = PrintStreamPresenter(System.out)
+            val presenter = PrintStreamPresenter(System.out, System.err)
             val logger = TinyLogWrapper()
 
 //            FileIO().readLinesAsInetAddress(System.getProperty("user.dir") + "/servers.txt").forEach {
@@ -47,21 +50,21 @@ class GrepClient(
     private fun search(args: Array<String>) {
         // Create queue to contain search results
         // Note: results from all servers will be available here
-        val queue: ConcurrentLinkedQueue<Server.Result> = ConcurrentLinkedQueue()
+        val queue: ConcurrentLinkedQueue<Server.Response> = ConcurrentLinkedQueue()
 
         // Connection servers
         logger.info(tag, "args: [{}]", args.joinToString(", "))
         var queries: List<Server.Query> = servers.map { server ->
-            server.search(args) { result ->
-                logger.debug(tag, "{} result: {}", result.name, result.result)
-                queue.add(result)
+            server.search(args) { response ->
+                logger.debug(tag, "response: {}", response)
+                queue.add(response)
             }
         }
 
         while (queries.isNotEmpty()) {
             while (true) {
                 val result = queue.poll() ?: break
-                presenter.displayResult(result)
+                presenter.displayResponse(result)
             }
 
             queries = filterQueries(queries)

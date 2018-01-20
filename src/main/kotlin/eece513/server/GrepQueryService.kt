@@ -11,20 +11,44 @@ class GrepQueryService(
 ) : GrepServer.QueryService {
     private val tag = GrepQueryService::class.java.simpleName
 
-    override fun search(args: Array<String>, onResult: (String) -> Unit) {
+    override fun search(
+            args: Array<String>, onResult: (String) -> Unit, onError: (Array<String>) -> Unit
+    ) {
         val argsList = arrayOf(cmd, *args, logFile)
         logger.debug(tag, "grep cmd: {}", argsList.joinToString(" "))
 
-        val proc = ProcessBuilder(*argsList).start()
+        var esr: InputStreamReader? = null
+        var isr: InputStreamReader? = null
 
-        val isr = InputStreamReader(proc.inputStream)
-        val br = BufferedReader(isr)
+        var ebr: BufferedReader? = null
+        var ibr: BufferedReader? = null
 
-        while (true) {
-            val line = br.readLine() ?: break
-            onResult.invoke(line)
+        try {
+            val proc = ProcessBuilder(*argsList).start()
+
+            esr = InputStreamReader(proc.errorStream)
+            ebr = BufferedReader(esr)
+
+            isr = InputStreamReader(proc.inputStream)
+            ibr = BufferedReader(isr)
+
+            if (ebr.ready()) {
+                onError.invoke(ebr.readLines().toTypedArray())
+                return
+            }
+
+            while (true) {
+                val line = ibr.readLine() ?: break
+                onResult.invoke(line)
+            }
+
+            logger.debug(tag, "no more results!")
+        } finally {
+            esr?.close()
+            isr?.close()
+
+            ebr?.close()
+            ibr?.close()
         }
-
-        br.close()
     }
 }
