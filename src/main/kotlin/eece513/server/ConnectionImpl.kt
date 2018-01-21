@@ -35,7 +35,19 @@ class ConnectionImpl(socket: Socket, private val logger: Logger) : GrepServer.Co
     }
 
     override fun sendResult(result: String) {
-        bw.write(result)
+        logger.debug(tag, "sending result: {}", result)
+        bw.write("R:1\n")
+        bw.write("$result\n")
+        bw.flush()
+    }
+
+    override fun sendError(error: Array<String>) {
+        bw.write("E:${error.size}\n")
+        for (line in error) {
+            logger.error(tag, "error: {}", line)
+            bw.write("$line\n")
+        }
+
         bw.flush()
     }
 }

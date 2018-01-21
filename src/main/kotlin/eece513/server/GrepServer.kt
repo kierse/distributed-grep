@@ -8,13 +8,14 @@ class GrepServer(
         private val logger: Logger
 ) {
     interface QueryService {
-        fun search(args: Array<String>, onResult: (String) -> Unit)
+        fun search(args: Array<String>, onResult: (String) -> Unit, onError: (Array<String>) -> Unit)
     }
 
     interface ConnectionListener {
         interface Connection {
             fun getQueryArgs(): Array<String>
             fun sendResult(result: String)
+            fun sendError(error: Array<String>)
         }
 
         fun listen(onQuery: (Connection) -> Unit)
@@ -41,12 +42,11 @@ class GrepServer(
             val args = connection.getQueryArgs()
             logger.debug(tag, "query args: [{}]", args.joinToString(", "))
 
-            queryService.search(args) { result ->
-                logger.debug(tag, "found result: {}", result)
-                connection.sendResult("$result\n")
-            }
-
-            logger.debug(tag, "no more results!")
+            queryService.search(
+                    args,
+                    { connection.sendResult(it) },
+                    { connection.sendError(it) }
+            )
         }
     }
 }
