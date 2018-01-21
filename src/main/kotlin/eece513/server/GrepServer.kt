@@ -26,8 +26,8 @@ class GrepServer(
 
         @JvmStatic
         fun main(args: Array<String>) {
-            val logger = TinyLogWrapper()
-            val queryService = GrepQueryService(GREP_CMD, LOG_LOCATION, logger)
+            val logger = TinyLogWrapper(SERVER_LOG_LOCATION)
+            val queryService = GrepQueryService(GREP_CMD, GREP_DATA_LOCATION, logger)
             val queryListener = SocketConnectionListener(SERVER_PORT, logger)
 
             GrepServer(queryService, queryListener, logger)
