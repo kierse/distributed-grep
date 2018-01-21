@@ -33,12 +33,14 @@ class GrepClient(
             val presenter = PrintStreamPresenter(System.out)
             val logger = TinyLogWrapper()
 
-            FileIO().readLinesAsInetAddress(System.getProperty("user.dir") + "/servers.txt").forEach{
-                val servers = arrayOf(ServerImpl(it, SERVER_PORT, "server1"))
+//            FileIO().readLinesAsInetAddress(System.getProperty("user.dir") + "/servers.txt").forEach {
+//                val servers = arrayOf(ServerImpl(it, SERVER_PORT, "server1", logger))
+                val servers = arrayOf(ServerImpl(SERVER_IP, SERVER_PORT, "server1", logger))
 
 
-            GrepClient(presenter, logger, *servers)
-                    .search(args)
+                GrepClient(presenter, logger, *servers)
+                        .search(args)
+//            }
         }
     }
 
