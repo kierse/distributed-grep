@@ -43,7 +43,7 @@ Note: this put the jar in build/libs
 ### Creating a Similar EC2 Instance###
 1. Under **INSTANCES > instances** on the left sidebar, select the instance you want to clone
 2. Select **Actions > Launch More Like This** 
- _Note: for ease of use, use the same security group_
+* _Note: for ease of use, use the same security group_
 
 ### Setting Up Security Groups for EC2 Instances ###
 1. Select the security group associated with your instances e.g. launch-wizard-1
@@ -54,5 +54,5 @@ Note: this put the jar in build/libs
 > Type: All traffic, Destination: 0.0.0.0/0
 > Type: SSH, Destination: 0.0.0.0/0
 ```
- If one rule is missing, select **Add Rule** to generate a new line
+* If one rule is missing, select **Add Rule** to generate a new line
 5. Repeat for the **Outbound** tab
