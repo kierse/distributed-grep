@@ -1,5 +1,6 @@
 package eece513.client
 
+import eece513.Logger
 import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.io.InputStreamReader
@@ -12,10 +13,11 @@ class QueryImpl(
         private val ip: InetAddress,
         private val port: Int,
         private val id: String,
-        private val query: String,
+        private val args: Array<String>,
+        private val logger: Logger,
         private val onResult: (GrepClient.Server.Result) -> Unit
 ) : GrepClient.Server.Query, Runnable {
-
+    private val tag = QueryImpl::class.java.simpleName
     private val moreResults = AtomicBoolean(true)
 
     override fun run() {
@@ -23,8 +25,13 @@ class QueryImpl(
             val osw = OutputStreamWriter(socket.getOutputStream())
             val bw = BufferedWriter(osw)
 
-            // send query
-            bw.write(query)
+            // send query args, one-by-one
+            logger.debug(tag, "sending ${args.size} args...")
+
+            for (arg in args) {
+                logger.debug(tag, "arg: $arg")
+                bw.write("$arg\n")
+            }
             bw.flush()
 
             // indicate no more data

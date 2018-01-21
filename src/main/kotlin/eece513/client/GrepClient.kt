@@ -22,7 +22,7 @@ class GrepClient(
             fun isComplete(): Boolean
         }
 
-        fun search(query: String, onResult: (Result) -> Unit): Query
+        fun search(args: Array<String>, onResult: (Result) -> Unit): Query
     }
 
     companion object {
@@ -37,9 +37,8 @@ class GrepClient(
                 val servers = arrayOf(ServerImpl(it, SERVER_PORT, "server1"))
 
 
-                GrepClient(presenter, logger, *servers)
-                        .search(args)
-            }
+            GrepClient(presenter, logger, *servers)
+                    .search(args)
         }
     }
 
@@ -49,11 +48,9 @@ class GrepClient(
         val queue: ConcurrentLinkedQueue<Server.Result> = ConcurrentLinkedQueue()
 
         // Connection servers
-        val query = args.joinToString(" ")
-        logger.info(tag, "query: {}", query)
-
+        logger.info(tag, "args: [{}]", args.joinToString(", "))
         var queries: List<Server.Query> = servers.map { server ->
-            server.search(query) { result ->
+            server.search(args) { result ->
                 logger.debug(tag, "{} result: {}", result.name, result.result)
                 queue.add(result)
             }
