@@ -1,4 +1,6 @@
-ec2-35-182-65-174.ca-central-1.compute.amazonaws.com
 ec2-35-183-26-44.ca-central-1.compute.amazonaws.com
 ec2-35-182-253-217.ca-central-1.compute.amazonaws.com
-
+ec2-35-182-96-209.ca-central-1.compute.amazonaws.com
+ec2-35-182-245-153.ca-central-1.compute.amazonaws.com
+ec2-35-182-65-174.ca-central-1.compute.amazonaws.com
+ec2-35-183-15-21.ca-central-1.compute.amazonaws.com
