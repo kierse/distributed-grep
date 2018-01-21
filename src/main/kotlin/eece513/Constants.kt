@@ -10,4 +10,4 @@ const val GREP_CMD = "/usr/bin/grep"
 
 const val SERVER_LOG_LOCATION = "logs/grep-server.log"
 const val CLIENT_LOG_LOCATION = "logs/grep-client.log"
-const val GREP_DATA_LOCATION = "logs/machine.log"
+const val GREP_DATA_LOCATION = "machine.log"

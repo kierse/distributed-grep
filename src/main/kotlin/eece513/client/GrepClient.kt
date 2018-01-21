@@ -43,8 +43,8 @@ class GrepClient(
             val helpGenerator = GrepHelpGenerator(GREP_CMD, logger)
 
 //            FileIO().readLinesAsInetAddress(System.getProperty("user.dir") + "/servers.txt").forEach {
-//                val servers = arrayOf(ServerImpl(it, SERVER_PORT, "server1", logger))
-                val servers = arrayOf(ServerImpl(SERVER_IP, SERVER_PORT, "server1", logger))
+//                val servers = arrayOf(ServerImpl(it, SERVER_PORT, it, logger))
+                val servers = arrayOf(ServerImpl(SERVER_IP, SERVER_PORT, "ec2-35-183-26-44.ca-central-1.compute.amazonaws.com", logger))
 //            }
 
             GrepClient(presenter, helpGenerator, logger, *servers)
