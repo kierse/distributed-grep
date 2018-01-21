@@ -33,25 +33,26 @@ Note: this put the jar in build/libs
 ```
 
 ### Creating a nNw EC2 Instances ###
-1. On the EC2 Dashboard, select "Launch Instance"
-2. Create a instance of type "Amazon Linux AMI 2017.09.1 (HVM), SSD Volume Type"
-3. Leave the defaults as is by selecting "Review and Launch" > "Launch" at the bottom right of the screen
-4. In the following popup, select "Create a new key pair" from the first dropdown
-5. Give it a name and select "Download" to get your private key
-6. Finally, select "Launch Instance"
+1. On the EC2 Dashboard, select **Launch Instance**
+2. Create a instance of type **Amazon Linux AMI 2017.09.1 (HVM), SSD Volume Type**
+3. Leave the defaults as is by selecting **Review and Launch > Launch** at the bottom right of the screen
+4. In the following popup, select **Create a new key pair** from the first dropdown
+5. Give it a name and select **Download** to get your private key
+6. Finally, select **Launch Instance**
 
 ### Creating a Similar EC2 Instance###
-1. Under INSTANCES > instances on the left sidebar, select the instance you want to clone
-2. Select "Actions > Launch More Like This"
-**Note**: for ease of use, use the same security group
+1. Under **INSTANCES > instances** on the left sidebar, select the instance you want to clone
+2. Select **Actions > Launch More Like This** 
+ _Note: for ease of use, use the same security group_
 
 ### Setting Up Security Groups for EC2 Instances ###
 1. Select the security group associated with your instances e.g. launch-wizard-1
-2. In the split window on the bottom, select the Inbound tab
-3. Select "Edit"
+2. In the split window on the bottom, select the **Inbound** tab
+3. Select **Edit**
 4. Then on the popup window, ensure you have 2 rules:
 ```
 > Type: All traffic, Destination: 0.0.0.0/0
 > Type: SSH, Destination: 0.0.0.0/0
 ```
-If one rule is missing, select "Add Rule" to generate a new line
+ If one rule is missing, select **Add Rule** to generate a new line
+5. Repeat for the **Outbound** tab
