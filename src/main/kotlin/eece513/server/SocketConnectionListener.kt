@@ -19,12 +19,6 @@ class SocketConnectionListener(private val port: Int, private val logger: Logger
                     // inform client that we're done sending data..
                     logger.debug(tag, "closing output stream")
                     socket.shutdownOutput()
-
-                    /* wait until client has read all data and closed connection */
-//                logger.debug(tag, "waiting for client to close connection...")
-//                while (!socket.isClosed) { }
-
-//                logger.debug(tag, "client closed connection. Terminating socket!")
                 }
             }
         }

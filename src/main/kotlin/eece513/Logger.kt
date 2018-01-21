@@ -6,6 +6,7 @@ import org.pmw.tinylog.Logger as Tiny
 interface Logger {
     fun debug(tag: String, msg: String, vararg args: Any)
     fun info(tag: String, msg: String, vararg args: Any)
+    fun error(tag: String, msg: String, vararg args: Any)
 }
 
 class TinyLogWrapper : Logger {
@@ -19,6 +20,7 @@ class TinyLogWrapper : Logger {
 
     override fun debug(tag: String, msg: String, vararg args: Any) = Tiny.debug(prepareMsg(tag, msg), *args)
     override fun info(tag: String, msg: String, vararg args: Any) = Tiny.info(prepareMsg(tag, msg), *args)
+    override fun error(tag: String, msg: String, vararg args: Any) = Tiny.error(prepareMsg(tag, msg), *args)
 
     private fun prepareMsg(tag: String, msg: String) = "$tag:\t$msg"
 }
