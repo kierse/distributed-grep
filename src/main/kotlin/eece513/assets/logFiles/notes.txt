@@ -1,0 +1,33 @@
+Things in common
+================
+1. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vel magna vitae nisi vulputate vestibulum. Etiam at turpis sapien. Nunc nec tincidunt tellus. In hac habitasse platea dictumst. Cras sit amet varius sapien, a scelerisque urna. Vivamus mollis, elit quis tincidunt maximus, lectus leo venenatis eros, vitae mattis nisi massa vitae mi. Aliquam volutpat, purus vel imperdiet tristique, nunc felis lobortis libero, id vulputate velit eros ut elit. Phasellus quis lectus magna. Aenean elementum sem ac elementum lobortis. Ut nisi nibh, congue ac finibus finibus, venenatis ut ligula. Ut posuere quam et nisi sodales, id pellentesque felis hendrerit. Sed risus nulla, commodo at lacinia eget, maximus eget risus. Praesent quis fringilla metus, eget vulputate libero.
+
+2. [Wed Jun  7 12:26:08 1995] httpd: send aborted for broadway.sfn.saskatoon.sk.ca
+
+Machines 2,3,4 common
+=====================
+[Wed Jun  7 14:44:02 1995] httpd: send aborted for akira.link.ca
+
+Machine 1
+=========
+2+1: Tue Aug 22 00:00:05 1995 (/wow/mexico/resort/redb.gif): Sent binary: GET /wow/mexico/
+
+Machine 2
+=========
+6+1: Tue Aug 22 00:00:28 1995 (): Sorry, access denied or file does not exist.: /var/spool/gn/Fun/Movies
+
+Machine 3
+=========
+41+1: Tue Aug 22 00:22:32 1995 (): HTTP error: HTTP/1.0 403 Sorry, access denied or file does not exist.
+
+Machine 4
+=========
+64+1: Tue Aug 22 00:42:34 1995 (/): Sent cache:
+
+Machine 5
+=========
+foo bar baz
+
+Machine 6
+=========
+2117+1: Tue Aug 22 23:58:58 1995 (): No match for selector: GET /SDSC/Partners/Surfrider/srflogo7.gif HTTP/1.0

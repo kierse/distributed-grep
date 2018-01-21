@@ -39,7 +39,7 @@ class GrepClient(
         @JvmStatic
         fun main(args: Array<String>) {
             val presenter = PrintStreamPresenter(System.out, System.err)
-            val logger = TinyLogWrapper()
+            val logger = TinyLogWrapper(CLIENT_LOG_LOCATION)
             val helpGenerator = GrepHelpGenerator(GREP_CMD, logger)
 
 //            FileIO().readLinesAsInetAddress(System.getProperty("user.dir") + "/servers.txt").forEach {

@@ -1,6 +1,8 @@
 package eece513
 
 import org.pmw.tinylog.Configurator
+import org.pmw.tinylog.Level
+import org.pmw.tinylog.writers.FileWriter
 import org.pmw.tinylog.Logger as Tiny
 
 interface Logger {
@@ -9,12 +11,13 @@ interface Logger {
     fun error(tag: String, msg: String, vararg args: Any)
 }
 
-class TinyLogWrapper : Logger {
+class TinyLogWrapper(logLocation: String) : Logger {
     init {
         Configurator
                 .currentConfig()
                 .formatPattern("{date:yyyy-MM-dd HH:mm:ss} {thread} {level}: {message}")
-                .level(LOGGING_LEVEL)
+                .level(Level.DEBUG)
+                .writer(FileWriter(logLocation), Level.DEBUG)
                 .activate()
     }
 
