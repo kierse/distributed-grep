@@ -1,23 +1,35 @@
+#/bin/sh
+
 file="servers.txt"
 count=1
 while IFS= read line
 do
-	ssh -f -i Ubuntu1.pem ec2-user@"$line" 'pkill -9 -f distributed-grep-1.0-SNAPSHOT.jar'
+	echo ---
+        echo "instance: $line"
+
+	echo "attempting to kill running grep-server..."
+	ssh -f -i Ubuntu1.pem ec2-user@"$line" 'pkill -9 -f distributed-grep-1.0.jar'
 
         # log files
+	#echo "copying machine specific log file..."
         #scp -i Ubuntu1.pem logFiles/machine."$count".log ec2-user@"$line":/home/ec2-user
         ((count++))
 
         # server list
+	#echo "copying list of servers..."
         #scp -i Ubuntu1.pem servers.txt ec2-user@"$line":/home/ec2-user
         
 	# jar files
-        #scp -i Ubuntu1.pem distributed-grep-1.0-SNAPSHOT.jar ec2-user@"$line":/home/ec2-user
+	echo "copying jar..."
+        scp -i Ubuntu1.pem distributed-grep-1.0.jar ec2-user@"$line":/home/ec2-user
 
         # start files
+	echo "copying grep-client shell script..."
         scp -i Ubuntu1.pem startClient ec2-user@"$line":/home/ec2-user
 
-        echo "$line"
         # start server jar file
-	ssh -f -i Ubuntu1.pem ec2-user@"$line" 'java -cp ~/distributed-grep-1.0-SNAPSHOT.jar eece513.server.GrepServer'
+        echo "starting grep-server..."
+	ssh -f -i Ubuntu1.pem ec2-user@"$line" 'java -cp ~/distributed-grep-1.0.jar eece513.server.GrepServer'
+
+	echo
 done <"$file"
