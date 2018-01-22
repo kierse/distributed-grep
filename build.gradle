@@ -10,7 +10,7 @@ buildscript {
 }
 
 group 'eece513'
-version '1.0-SNAPSHOT'
+version '1.0'
 
 apply plugin: 'java'
 apply plugin: 'kotlin'
@@ -52,4 +52,13 @@ jar {
     from {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
+}
+
+task jarToAssets(type: Copy) {
+    from jar
+    into "src/main/kotlin/eece513/assets"
+}
+
+clean {
+    file('src/main/kotlin/eece513/assets/distributed-grep-1.0.jar').delete()
 }
