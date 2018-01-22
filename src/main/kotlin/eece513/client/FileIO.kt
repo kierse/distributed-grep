@@ -4,7 +4,7 @@ import java.io.*
 import java.net.InetAddress
 
 class FileIO{
-    fun readLinesAsInetAddress(path:String): ArrayList<InetAddress> {
+    fun ReadLinesAsInetAddress(path:String): ArrayList<InetAddress> {
         val inputStream: InputStream = File(path).inputStream()
         val lineList = ArrayList<InetAddress>()
 
@@ -12,5 +12,16 @@ class FileIO{
             lineList.add(InetAddress.getByName(it))
         }}
         return lineList
+    }
+
+    fun GetGrepDataLoc():String{
+        File(System.getProperty("user.dir")).walkTopDown().forEach {
+            val fileName = it.name.split("\\").last()
+            if(fileName.startsWith("machine.") && fileName.endsWith(".log")){
+                return fileName
+            }
+        }
+
+        return "machine.*.log file not found"
     }
 }

@@ -1,6 +1,7 @@
 package eece513.server
 
 import eece513.*
+import eece513.client.FileIO
 
 class GrepServer(
         private val queryService: QueryService,
@@ -27,7 +28,8 @@ class GrepServer(
         @JvmStatic
         fun main(args: Array<String>) {
             val logger = TinyLogWrapper(SERVER_LOG_LOCATION)
-            val queryService = GrepQueryService(GREP_CMD, GREP_DATA_LOCATION, logger)
+            val grepDataLoc = FileIO().GetGrepDataLoc()
+            val queryService = GrepQueryService(GREP_CMD, grepDataLoc, logger)
             val queryListener = SocketConnectionListener(SERVER_PORT, logger)
 
             GrepServer(queryService, queryListener, logger)
