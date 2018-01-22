@@ -5,19 +5,19 @@ do
 	ssh -f -i Ubuntu1.pem ec2-user@"$line" 'pkill -9 -f distributed-grep-1.0-SNAPSHOT.jar'
 
         # log files
-        #scp -i Ubuntu1.pem logFiles/machine."$count".log ec2-user@"$line":/home/ec2-user;
-	((count++))
+        #scp -i Ubuntu1.pem logFiles/machine."$count".log ec2-user@"$line":/home/ec2-user
+        ((count++))
 
         # server list
         #scp -i Ubuntu1.pem servers.txt ec2-user@"$line":/home/ec2-user
         
 	# jar files
-        scp -i Ubuntu1.pem distributed-grep-1.0-SNAPSHOT.jar ec2-user@"$line":/home/ec2-user
+        #scp -i Ubuntu1.pem distributed-grep-1.0-SNAPSHOT.jar ec2-user@"$line":/home/ec2-user
 
         # start files
         #scp -i Ubuntu1.pem startClient ec2-user@"$line":/home/ec2-user
 
         echo "$line"
         # start server jar file
-	ssh -f -i Ubuntu1.pem ec2-user@"$line" 'java -cp ~/distributed-grep-1.0-SNAPSHOT.jar eece513.server.GrepServer &'
+	ssh -f -i Ubuntu1.pem ec2-user@"$line" 'java -cp ~/distributed-grep-1.0-SNAPSHOT.jar eece513.server.GrepServer'
 done <"$file"
