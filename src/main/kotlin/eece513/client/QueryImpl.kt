@@ -7,6 +7,7 @@ import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.ConnectException
 import java.net.InetAddress
+import java.net.InetSocketAddress
 import java.net.Socket
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -23,15 +24,15 @@ class QueryImpl(
     private val moreResults = AtomicBoolean(true)
 
     override fun run() {
-        var socket: Socket? = null
+        val socket: Socket = Socket()
 
         try {
-            socket = Socket(ip, port)
+            socket.connect(InetSocketAddress(ip, port), 1000) // timeout after 1 second
             process(socket)
         } catch (e: ConnectException) {
             handleConnectionError()
         } finally {
-            socket?.close()
+            socket.close()
         }
     }
 
