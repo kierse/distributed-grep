@@ -4,21 +4,23 @@ import java.io.*
 import java.net.InetAddress
 
 class FileIO{
-    fun ReadLinesAsInetAddress(path:String): ArrayList<InetAddress> {
+    fun ReadLinesAsInetAddress(path:String): List<InetAddress> {
         val inputStream: InputStream = File(path).inputStream()
-        val lineList = ArrayList<InetAddress>()
 
-        inputStream.bufferedReader().useLines { lines -> lines.forEach {
-            lineList.add(InetAddress.getByName(it))
-        }}
-        return lineList
+        return inputStream
+                .bufferedReader()
+                .readLines()
+                .filter { it.isNotEmpty() }
+                .map {
+                    InetAddress.getByName(it)
+                }
     }
 
     fun GetGrepDataLoc():String{
-        File(System.getProperty("user.dir")).walkTopDown().forEach {
-            val fileName = it.name.split("\\").last()
-            if(fileName.startsWith("machine.") && fileName.endsWith(".log")){
-                return fileName
+        val regex = Regex("""machine\.\d\.log$""")
+        File(System.getProperty("user.dir")).walkTopDown().forEach { file ->
+            if (file.name.matches(regex)) {
+                return file.absolutePath
             }
         }
 
