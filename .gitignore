@@ -71,3 +71,6 @@ modules.xml
 .gradle/
 build/
 logs/
+
+# ignore generated jar files in assets dir
+src/main/kotlin/eece513/assets/distributed-grep-1.0.jar
