@@ -51,6 +51,10 @@ class GrepClient(
         }
     }
 
+    init {
+        if (servers.isEmpty()) throw IllegalArgumentException("must provide at least one server!")
+    }
+
     internal fun search(args: Array<String>) {
         if (args.isEmpty()) {
             presenter.displayHelp(helpGenerator.getHelpMessage())
