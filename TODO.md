@@ -7,5 +7,5 @@
 * [v] pass command line args individually (so user provided spaces are maintained)
 * [ ] unit/integration testing
 * [ ] log files from testing
-* [x] reading IPs from file
-* [x] shell script to kick off servers + smaller client cmd
+* [v] reading IPs from file
+* [v] shell script to kick off servers + smaller client cmd

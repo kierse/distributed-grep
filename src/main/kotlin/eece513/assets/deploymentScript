@@ -12,10 +12,10 @@ do
         #scp -i Ubuntu1.pem servers.txt ec2-user@"$line":/home/ec2-user
         
 	# jar files
-        scp -i Ubuntu1.pem distributed-grep-1.0-SNAPSHOT.jar ec2-user@"$line":/home/ec2-user
+        #scp -i Ubuntu1.pem distributed-grep-1.0-SNAPSHOT.jar ec2-user@"$line":/home/ec2-user
 
         # start files
-        #scp -i Ubuntu1.pem startClient ec2-user@"$line":/home/ec2-user
+        scp -i Ubuntu1.pem startClient ec2-user@"$line":/home/ec2-user
 
         echo "$line"
         # start server jar file
