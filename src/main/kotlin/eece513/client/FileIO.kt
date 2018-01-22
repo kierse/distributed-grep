@@ -17,10 +17,10 @@ class FileIO{
     }
 
     fun GetGrepDataLoc():String{
-        File(System.getProperty("user.dir")).walkTopDown().forEach {
-            val fileName = it.name.split("\\").last()
-            if(fileName.startsWith("machine.") && fileName.endsWith(".log")){
-                return fileName
+        val regex = Regex("""machine\.\d\.log$""")
+        File(System.getProperty("user.dir")).walkTopDown().forEach { file ->
+            if (file.name.matches(regex)) {
+                return file.absolutePath
             }
         }
 
