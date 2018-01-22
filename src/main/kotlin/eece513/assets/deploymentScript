@@ -1,3 +1,5 @@
+#/bin/sh
+
 file="servers.txt"
 count=1
 while IFS= read line
