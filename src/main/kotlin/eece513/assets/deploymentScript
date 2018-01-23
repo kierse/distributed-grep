@@ -1,35 +1,42 @@
 #/bin/sh
 
+pem="Ubuntu1.pem"
 file="servers.txt"
 count=1
+
+# look for overridden PEM file...
+if [ -f "$1" ]; then
+	pem="$1"
+fi
+
 while IFS= read line
 do
 	echo ---
         echo "instance: $line"
 
 	echo "attempting to kill running grep-server..."
-	ssh -f -i Ubuntu1.pem ec2-user@"$line" 'pkill -9 -f distributed-grep-1.0.jar'
+	ssh -f -i "$pem" ec2-user@"$line" 'pkill -9 -f distributed-grep-1.0.jar'
 
         # log files
 	#echo "copying machine specific log file..."
-        #scp -i Ubuntu1.pem logFiles/machine."$count".log ec2-user@"$line":/home/ec2-user
+        #scp -i "$pem" logFiles/machine."$count".log ec2-user@"$line":/home/ec2-user
         ((count++))
 
         # server list
 	#echo "copying list of servers..."
-        #scp -i Ubuntu1.pem servers.txt ec2-user@"$line":/home/ec2-user
+        #scp -i "$pem" servers.txt ec2-user@"$line":/home/ec2-user
         
 	# jar files
 	echo "copying jar..."
-        scp -i Ubuntu1.pem distributed-grep-1.0.jar ec2-user@"$line":/home/ec2-user
+        scp -i "$pem" distributed-grep-1.0.jar ec2-user@"$line":/home/ec2-user
 
         # start files
 	echo "copying grep-client shell script..."
-        scp -i Ubuntu1.pem startClient ec2-user@"$line":/home/ec2-user
+        scp -i "$pem" startClient ec2-user@"$line":/home/ec2-user
 
         # start server jar file
         echo "starting grep-server..."
-	ssh -f -i Ubuntu1.pem ec2-user@"$line" 'java -cp ~/distributed-grep-1.0.jar eece513.server.GrepServer'
+	ssh -f -i "$pem" ec2-user@"$line" 'java -cp ~/distributed-grep-1.0.jar eece513.server.GrepServer'
 
 	echo
 done <"$file"

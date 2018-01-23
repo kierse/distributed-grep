@@ -22,11 +22,15 @@ Machine 3
 
 Machine 4
 =========
-64+1: Tue Aug 22 00:42:34 1995 (/): Sent cache:
+sCoOby
+doobY
+DOO
 
 Machine 5
 =========
-foo bar baz
+foo
+bar
+baz
 
 Machine 6
 =========

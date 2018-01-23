@@ -11,14 +11,20 @@ interface Logger {
     fun error(tag: String, msg: String, vararg args: Any)
 }
 
-class TinyLogWrapper(logLocation: String) : Logger {
+class TinyLogWrapper(logLocation: String?) : Logger {
+    constructor(): this(null)
+
     init {
-        Configurator
+        val config = Configurator
                 .currentConfig()
                 .formatPattern("{date:yyyy-MM-dd HH:mm:ss} {thread} {level}: {message}")
                 .level(Level.DEBUG)
-                .writer(FileWriter(logLocation), Level.DEBUG)
-                .activate()
+
+        if (logLocation != null) {
+            config.writer(FileWriter(logLocation), Level.DEBUG)
+        }
+
+        config.activate()
     }
 
     override fun debug(tag: String, msg: String, vararg args: Any) = Tiny.debug(prepareMsg(tag, msg), *args)
