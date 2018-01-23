@@ -19,6 +19,7 @@ do
 
         # log files
 	#echo "copying machine specific log file..."
+	#ssh -f -i "$pem" ec2-user@"$line" 'rm machine.*.log'
         #scp -i "$pem" logFiles/machine."$count".log ec2-user@"$line":/home/ec2-user
         ((count++))
 
