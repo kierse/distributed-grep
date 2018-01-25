@@ -21,6 +21,28 @@ repositories {
     mavenCentral()
 }
 
+sourceSets {
+    test {
+        kotlin {
+            srcDirs += "src/test/unit/kotlin"
+        }
+    }
+
+    distributedTest {
+        kotlin {
+            srcDirs += "src/test/distributed/kotlin"
+        }
+
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
+}
+
+configurations {
+    distributedTestCompile.extendsFrom testCompile
+    distributedTestRuntime.extendsFrom testRuntime
+}
+
 dependencies {
     // kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
@@ -30,11 +52,17 @@ dependencies {
 
     // junit
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    distributedTestCompile group: 'junit', name: 'junit', version: '4.12'
 
     // mockito
     testCompile group: 'org.mockito', name: 'mockito-core', version: '2.13.0'
+    distributedTestCompile group: 'org.mockito', name: 'mockito-core', version: '2.13.0'
+
     testCompile group: 'com.nhaarman', name: 'mockito-kotlin', version: '1.5.0'
+    distributedTestCompile group: 'com.nhaarman', name: 'mockito-kotlin', version: '1.5.0'
+
     testCompile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: '1.2.20'
+    distributedTestCompile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: '1.2.20'
 }
 
 compileKotlin {
@@ -57,6 +85,11 @@ jar {
 task jarToAssets(type: Copy) {
     from jar
     into "src/main/kotlin/eece513/assets"
+}
+
+task distributedTest(type: Test, description: 'Runs the distributed unit tests.', group: 'Verification') {
+    setTestClassesDirs sourceSets.distributedTest.output.classesDirs
+    classpath = sourceSets.distributedTest.runtimeClasspath
 }
 
 clean {

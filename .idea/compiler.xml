@@ -2,6 +2,8 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
+      <module name="distributed-grep_distributed" target="1.8" />
+      <module name="distributed-grep_distributedTest" target="1.8" />
       <module name="distributed-grep_main" target="1.8" />
       <module name="distributed-grep_test" target="1.8" />
     </bytecodeTargetLevel>
