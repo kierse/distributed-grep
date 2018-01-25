@@ -37,7 +37,7 @@ class GrepServer(
         }
     }
 
-    private fun run() {
+    internal fun run() {
         logger.info(tag, "booting up...")
 
         connectionListener.listen { connection ->

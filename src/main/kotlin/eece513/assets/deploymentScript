@@ -1,43 +1,100 @@
 #/bin/sh
 
-pem="Ubuntu1.pem"
-file="servers.txt"
-count=1
+PEM="Ubuntu1.pem"
+FILE="servers.txt"
+COUNT=1
 
-# look for overridden PEM file...
-if [ -f "$1" ]; then
-	pem="$1"
+if [ "$#" -eq 0 ]; then
+    HELP=true
+fi
+
+for i in "$@"; do
+    case $i in
+        *.pem|*.PEM)
+            echo "overriding default pem with: $i"
+            PEM=$i
+            ;;
+
+        --help)
+            HELP=true
+            ;;
+
+        --logs)
+            LOGS=true
+            ;;
+
+        --server-list)
+            SERVERS=true
+            ;;
+
+        --jar)
+            JAR=true
+            ;;
+
+        --client-script)
+            CLIENT=true
+            ;;
+
+        --all)
+            ALL=true
+            ;;
+
+        *)
+            echo "unknown argument: $i"
+            HELP=true
+    esac
+done
+
+if [ ! -z "$HELP" ]; then
+    echo "usage: $0 [overriding PEM file]"
+    echo "          [--logs] (transfer log files)"
+    echo "          [--server-list] (transfer list of servers)"
+    echo "          [--jar] (transfer jar file)"
+    echo "          [--client-script] (transfer client command line script)"
+    echo "          [--all] (all of the above)"
+    echo "          [--help] (print this message)"
+    echo
+    exit
 fi
 
 while IFS= read line
 do
 	echo ---
-        echo "instance: $line"
+    echo "instance: $line"
 
 	echo "attempting to kill running grep-server..."
-	ssh -f -i "$pem" ec2-user@"$line" 'pkill -9 -f distributed-grep-1.0.jar'
+ 	ssh -f -i "$PEM" ec2-user@"$line" 'pkill -9 -f distributed-grep-1.0.jar'
 
-        # log files
-	#echo "copying machine specific log file..."
-	#ssh -f -i "$pem" ec2-user@"$line" 'rm machine.*.log'
-        #scp -i "$pem" logFiles/machine."$count".log ec2-user@"$line":/home/ec2-user
-        ((count++))
+    # log files
+    if [ ! -z "$LOGS" ] || [ ! -z "$ALL" ]; then
+        echo "copying machine specific log file..."
+         ssh -f -i "$PEM" ec2-user@"$line" 'rm machine.*.log'
+         scp -i "$PEM" logFiles/machine."$COUNT".log ec2-user@"$line":/home/ec2-user
+    fi
 
-        # server list
-	#echo "copying list of servers..."
-        #scp -i "$pem" servers.txt ec2-user@"$line":/home/ec2-user
-        
-	# jar files
-	echo "copying jar..."
-        scp -i "$pem" distributed-grep-1.0.jar ec2-user@"$line":/home/ec2-user
+    ((count++))
 
-        # start files
-	echo "copying grep-client shell script..."
-        scp -i "$pem" startClient ec2-user@"$line":/home/ec2-user
+    # server list
+    if [ ! -z "$SERVERS" ] || [ ! -z "$ALL" ]; then
+        echo "copying list of servers..."
+         scp -i "$PEM" servers.txt ec2-user@"$line":/home/ec2-user
+    fi
 
-        # start server jar file
-        echo "starting grep-server..."
-	ssh -f -i "$pem" ec2-user@"$line" 'java -cp ~/distributed-grep-1.0.jar eece513.server.GrepServer'
+    # jar files
+    if [ ! -z "$JAR" ] || [ ! -z "$ALL" ]; then
+        echo "copying jar..."
+         scp -i "$PEM" distributed-grep-1.0.jar ec2-user@"$line":/home/ec2-user
+    fi
+
+    # start files
+    if [ ! -z "$CLIENT" ] || [ ! -z "$ALL" ]; then
+        echo "copying grep-client shell script..."
+         scp -i "$PEM" startClient ec2-user@"$line":/home/ec2-user
+    fi
+
+    # start server jar file
+    echo "starting grep-server..."
+     ssh -f -i "$PEM" ec2-user@"$line" 'java -cp ~/distributed-grep-1.0.jar eece513.server.GrepServer'
 
 	echo
-done <"$file"
+done <"$FILE"

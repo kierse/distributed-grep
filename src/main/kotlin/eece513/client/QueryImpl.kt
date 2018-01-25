@@ -20,9 +20,9 @@ class QueryImpl(
     private val tag = QueryImpl::class.java.simpleName
     private val moreResults = AtomicBoolean(true)
 
-    override fun run() {
-        val socket = Socket()
+    override fun run() = run(Socket())
 
+    internal fun run(socket: Socket) {
         try {
             socket.connect(InetSocketAddress(ip, port), 1000) // timeout after 1 second
             process(socket)
