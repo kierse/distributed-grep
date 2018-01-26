@@ -8,6 +8,12 @@ import java.io.OutputStreamWriter
 import java.net.*
 import java.util.concurrent.atomic.AtomicBoolean
 
+/**
+ * Class that implements [GrepClient.Server.Query] and uses java.net.Socket's internally. This class opens a Java
+ * Socket to the given [ip] and [port], then marshall's data between the remote server and the invoking code.
+ *
+ * Note: QueryImpl implements the Runnable interface so instances can be executed by [Thread].
+ */
 class QueryImpl(
         private val ip: InetAddress,
         private val port: Int,

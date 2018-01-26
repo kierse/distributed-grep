@@ -4,6 +4,9 @@ import eece513.Logger
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
+/**
+ * Instances of this class run `grep --help` and return the results
+ */
 class GrepHelpGenerator(private val cmd: String, private val logger: Logger) : GrepClient.HelpGenerator {
     private val tag = GrepHelpGenerator::class.java.simpleName
 
@@ -15,6 +18,7 @@ class GrepHelpGenerator(private val cmd: String, private val logger: Logger) : G
         try {
             val proc = ProcessBuilder(cmd, "--help").start()
 
+            // Note: we're grabbing result from stderr NOT stdin
             esr = InputStreamReader(proc.errorStream)
             ebr = BufferedReader(esr)
 

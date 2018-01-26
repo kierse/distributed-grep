@@ -2,6 +2,11 @@ package eece513.client
 
 import java.io.PrintStream
 
+/**
+ * This class processes [GrepClient.Server.Response]'s and prints them
+ * to the given [out] and [err] PrintStream's. Instances of this class
+ * can be used to print results out to the console.
+ */
 class PrintStreamPresenter(
         private val out: PrintStream, private val err: PrintStream
 ) : GrepClient.Presenter {

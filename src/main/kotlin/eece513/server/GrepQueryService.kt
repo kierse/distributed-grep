@@ -4,6 +4,10 @@ import eece513.Logger
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
+/**
+ * Wrap UNIX grep in the [GrepServer.QueryService] interface. This class
+ * pipes grep output (both stdout and stderr) to the given result handlers
+ */
 class GrepQueryService(
         private val cmd: String,
         private val logFile: String,
@@ -11,6 +15,10 @@ class GrepQueryService(
 ) : GrepServer.QueryService {
     private val tag = GrepQueryService::class.java.simpleName
 
+    /**
+     * Run grep passing the given list of args and returning stdout to [onResult] and
+     * stderr to [onError].
+     */
     override fun search(
             args: Array<String>, onResult: (String) -> Unit, onError: (Array<String>) -> Unit
     ) {
