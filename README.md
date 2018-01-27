@@ -40,9 +40,14 @@ Attention: for Windows users, replace `gradlew` with `gradlew.bat`
  > java -cp build/libs/distributed-grep-1.0-SNAPSHOT.jar eece513.server.GrepServer
 ```
 
-#### Runs Unit Tests ####
+#### Runs Distributed Tests ####
 ```
  > ./gradlew distributedTest
+```
+
+#### Runs Unit Tests ####
+```
+ > ./gradlew test
 ```
 
 #### Upgrade from Java7 to Java8 ####
