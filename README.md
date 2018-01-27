@@ -14,7 +14,6 @@ Attention: for Windows users, replace `gradlew` with `gradlew.bat`
 5. In any EC2 instance home directory, use the _startClient_ command as you would call a _grep_ command
     ```
     > ./startClient [OPTION]
-    > ./startClient --help
     ```
 
 ## Auxiliary Commands ##
