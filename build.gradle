@@ -82,16 +82,21 @@ jar {
     }
 }
 
-task jarToAssets(type: Copy) {
-    from jar
-    into "src/main/kotlin/eece513/assets"
-}
-
-task distributedTest(type: Test, description: 'Runs the distributed unit tests.', group: 'Verification') {
+task distributedTest(type: Test, description: 'Runs the distributed tests.', group: 'Verification') {
     setTestClassesDirs sourceSets.distributedTest.output.classesDirs
     classpath = sourceSets.distributedTest.runtimeClasspath
 }
 
-clean {
-    file('src/main/kotlin/eece513/assets/distributed-grep-1.0.jar').delete()
+task configBootstrapAws {
+    doLast {
+        if (!project.hasProperty("pem")) {
+            throw new InvalidUserDataException("must provide path to PEM file!")
+        }
+
+        bootstrapAws.commandLine "./scripts/deploymentScript", project.pem, "--all"
+    }
+}
+
+task bootstrapAws(type: Exec, description: 'Configure AWS servers', group: 'Configuration') {
+    dependsOn = ['jarToAssets', 'configBootstrapAws']
 }

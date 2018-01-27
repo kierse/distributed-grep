@@ -3,6 +3,9 @@ package eece513.client
 import eece513.*
 import java.util.concurrent.ConcurrentLinkedQueue
 
+/**
+ * Instances of this class can be used to perform searches of log files on a list of provided remote servers.
+ */
 class GrepClient(
         private val presenter: Presenter,
         private val helpGenerator: HelpGenerator,
@@ -55,6 +58,10 @@ class GrepClient(
         if (servers.isEmpty()) throw IllegalArgumentException("must provide at least one server!")
     }
 
+    /**
+     * Calling this method with a list of query args will trigger searches on each configured remote server. Each
+     * search will be run on its own thread with all results being piped to the [presenter] on the main thread.
+     */
     fun search(args: Array<String>) {
         if (args.isEmpty()) {
             presenter.displayHelp(helpGenerator.getHelpMessage())
@@ -62,7 +69,7 @@ class GrepClient(
         }
 
         // Create queue to contain search results
-        // Note: results from all servers will be available here
+        // Note: results from all servers will be available here so this Collection must be thread safe!
         val queue: ConcurrentLinkedQueue<Server.Response> = ConcurrentLinkedQueue()
 
         // Connection servers
@@ -75,12 +82,16 @@ class GrepClient(
             }
         }
 
+        // loop until our list of Query objects is empty
         while (queries.isNotEmpty()) {
+
+            // loop and grab results from the top of the queue until there is nothing left
             while (true) {
                 val result = queue.poll() ?: break
                 presenter.displayResponse(result)
             }
 
+            // filter the list of Query objects for ones that are still producing results..
             queries = filterQueries(queries)
         }
     }
