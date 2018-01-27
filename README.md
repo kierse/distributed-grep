@@ -2,12 +2,12 @@
 
 Attention: for Windows users, replace `gradlew` with `gradlew.bat`
 
-## How to Run ##
+## How to Use ##
 1. Set up EC2 instance and pull from master
 2. Update instances to Java 8 if required
 3. Create a "Server.txt" file in the project root with Public DNS addresses of each EC2 instance
     * Note: this implementation currently only accommodates up to 6 instances
-4. Run the following command to deploy files
+4. Run the following command to build, deploy, and run distributed tests
     ```
      > ./gradlew bootstrapAws distributedTest -Ppem=/Users/kierse/.ssh/eece513_aws.pem
     ```
