@@ -12,6 +12,7 @@ Attention: for Windows users, replace `gradlew` with `gradlew.bat`
      > ./gradlew bootstrapAws distributedTest -Ppem=/Users/kierse/.ssh/eece513_aws.pem
     ```
 5. In any EC2 instance home directory, use the _startClient_ command as you would call a _grep_ command
+
     ```
     > ./startClient [OPTION]
     ```
