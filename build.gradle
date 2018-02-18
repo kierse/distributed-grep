@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.2.20'
+    ext.kotlin_version = '1.2.21'
 
     repositories {
         mavenCentral()
@@ -98,5 +98,5 @@ task configBootstrapAws {
 }
 
 task bootstrapAws(type: Exec, description: 'Configure AWS servers', group: 'Configuration') {
-    dependsOn = ['jarToAssets', 'configBootstrapAws']
+    dependsOn = ['configBootstrapAws']
 }
