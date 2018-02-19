@@ -23,16 +23,18 @@ class FileIO{
     * Gets the absolute path of the log files with the name pattern machine.*.log
     * */
     fun GetGrepDataLoc():String{
-        val regex = Regex("""machine\.\d\.log$""")
+//        val regex = Regex("""machine\.\d\.log$""")
+//
+//        // Tries to find a matched file name
+//        File(System.getProperty("user.dir")).walkTopDown().forEach { file ->
+//            if (file.name.matches(regex)) {
+//                return file.absolutePath
+//            }
+//        }
+//
+//        // Otherwise return error message
+//        return "machine.*.log file not found"
 
-        // Tries to find a matched file name
-        File(System.getProperty("user.dir")).walkTopDown().forEach { file ->
-            if (file.name.matches(regex)) {
-                return file.absolutePath
-            }
-        }
-
-        // Otherwise return error message
-        return "machine.*.log file not found"
+        return File(System.getProperty("user.dir"), "logs/distributed-app.log").absolutePath
     }
 }
